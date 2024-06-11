@@ -1,0 +1,33 @@
+#movie-card {
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+}
+.movie-image {
+  max-width: 210px;
+  border-radius: 8px;
+}
+.movie-texts {
+  padding: 5px 0 5px 5px;
+}
+.movie-title {
+  width: 200px;
+  font-family: "Space Grotesk";
+  font-weight: 600;
+}
+.rating-container {
+  display: flex;
+  align-items: center;
+  margin-top: 5px;
+}
+.stars {
+  font-size: 0.7rem;
+}
+.filled-star {
+  color: gold;
+}
+.rating-value {
+  font-family: "Space Grotesk";
+  padding-left: 7px;
+  font-size: 0.8rem;
+  font-weight: 100;
+}
