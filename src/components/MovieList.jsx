@@ -5,12 +5,14 @@ import "../styles/MovieList.css";
 function MovieList() {
   const [movies, setMovies] = useState([]);
   const [pageNumber, setPageNumber] = useState(Math.floor(Math.random() * 10));
+  const [searchQuery, setSearchQuery] = useState("");
   // const [pageNumber, setPageNumber] = useState(1);
 
-  console.log(pageNumber);
+  let now_playing_url = `https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=${pageNumber}`;
+  let search_query_url = `https://api.themoviedb.org/3/search/movie?query=${searchQuery}&include_adult=false&language=en-US&page=${pageNumber}`;
 
-  const getMovies = async (page) => {
-    const url = `https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=${page}`;
+  const getMovies = async (api_url) => {
+    const url = api_url;
     const options = {
       method: "GET",
       headers: {
@@ -40,7 +42,7 @@ function MovieList() {
 
   useEffect(() => {
     (async () => {
-      const initialMovies = await getMovies(pageNumber);
+      const initialMovies = await getMovies(now_playing_url);
       setMovies(initialMovies);
     })();
   }, []);
@@ -48,14 +50,37 @@ function MovieList() {
 
   const handleLoadMoreClick = async () => {
     setPageNumber((pageNumber) => pageNumber + 1);
-    const newMovies = await getMovies(pageNumber);
+    const newMovies = await getMovies(now_playing_url);
     console.log("this is newMovies " + newMovies);
     setMovies([...movies, ...newMovies]);
     console.log(pageNumber);
   };
 
+  const handleSearchChange = async (event) => {
+    setSearchQuery(event.target.value);
+    console.log(searchQuery);
+    setMovies([]);
+    const searchResults = await getMovies(search_query_url);
+
+    if (searchResults.length != 0) {
+      setMovies(searchResults);
+    } else {
+      setMovies([]);
+      //TODO: fix this else statement so that it displays "No results found" aesthetically
+    }
+  };
+
   return (
     <div id="movie-list-container">
+      <div id="search-and-sort-container">
+        <input
+          id="search-input"
+          placeholder="Search movie title..."
+          type="text"
+          value={searchQuery}
+          onChange={handleSearchChange}
+        />
+      </div>
       <div id="movie-list">
         {movies.map((movie) => (
           <MovieCard
