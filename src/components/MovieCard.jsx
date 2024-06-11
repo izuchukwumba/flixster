@@ -1,8 +1,8 @@
 import "../styles/MovieCard.css";
 
 function MovieCard(props) {
-  const emptyStar = <i class="fa-regular fa-star stars empty-star"></i>;
-  const filledStar = <i class="fa-solid fa-star stars filled-star"></i>;
+  const emptyStar = <i className="fa-regular fa-star stars empty-star"></i>;
+  const filledStar = <i className="fa-solid fa-star stars filled-star"></i>;
 
   const renderStars = (rating) => {
     const stars = [];

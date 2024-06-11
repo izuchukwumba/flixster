@@ -1,10 +1,13 @@
 #movie-card {
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  /* border: 1px solid rgba(255, 255, 255, 0.3); */
+  border: 1px solid rgba(255, 215, 0, 0.4);
   border-radius: 10px;
 }
 .movie-image {
   max-width: 210px;
   border-radius: 8px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
 }
 .movie-texts {
   padding: 5px 0 5px 5px;
