@@ -6,7 +6,6 @@ function Navbar() {
     <div id="navbar-container">
       <div id="navbar">
         <div id="logo-container">
-          {" "}
           <img id="logo" src={logo} />
         </div>
         <div id="nav-texts">
@@ -18,7 +17,13 @@ function Navbar() {
             <div>Settings</div>
           </div>
         </div>
-        <div id="user-welcome">Hello, Izuchukwu</div>
+
+        <div className="right-nav-content">
+          <div id="user-welcome">Hello, Izuchukwu</div>
+          {/* <div id="search-container">
+            <input id="search-input" placeholder="Search movie title..." />
+          </div> */}
+        </div>
       </div>
     </div>
   );
