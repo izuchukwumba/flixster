@@ -21,9 +21,12 @@ function MovieCard(props) {
         <img className="movie-image" src={props.imgSrc} />
         <div className="movie-texts">
           <div className="movie-title">{props.title}</div>
-          <div className="rating-container">
-            <span className="rating-stars">{renderStars(props.rating)}</span>
-            <span className="rating-value">{props.rating}</span>
+          <div id="movie-card-last-line">
+            <div className="rating-container">
+              <span className="rating-stars">{renderStars(props.rating)}</span>
+              <span className="rating-value">{props.rating}</span>
+            </div>
+            <div className="release-year">{props.release_year}</div>
           </div>
         </div>
       </div>
