@@ -6,6 +6,13 @@
   margin-top: 120px;
 }
 
+#second-movie-list-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 #movie-list {
   display: flex;
   align-items: center;
@@ -13,11 +20,17 @@
   flex-wrap: wrap;
   gap: 30px;
 }
+#loading-state-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 #load-more-button {
+  width: fit-content;
   background-color: gold;
   color: black;
   border: 1px solid black;
-  padding: 10px 15px;
+  padding: 10px 20px;
   border-radius: 10px;
   font-family: "Poppins";
   margin: 30px 0;
@@ -32,6 +45,9 @@
 
 #search-and-sort-container {
   margin: 15px 0;
+  display: flex;
+  align-items: center;
+  gap: 50px;
 }
 
 #search-input {
@@ -39,4 +55,30 @@
   width: 300px;
   border-radius: 7px;
   font-family: "Poppins";
+}
+select {
+  appearance: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  width: 380px;
+}
+
+/* HTML: <div class="loader"></div> */
+#loading-state {
+  width: 50px;
+  padding: 8px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: gold;
+  --_m: conic-gradient(#0000 10%, #000), linear-gradient(#000 0 0) content-box;
+  -webkit-mask: var(--_m);
+  mask: var(--_m);
+  -webkit-mask-composite: source-out;
+  mask-composite: subtract;
+  animation: l3 1s infinite linear;
+}
+@keyframes l3 {
+  to {
+    transform: rotate(1turn);
+  }
 }
