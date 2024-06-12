@@ -20,9 +20,6 @@ function Navbar() {
 
         <div className="right-nav-content">
           <div id="user-welcome">Hello, Izuchukwu</div>
-          {/* <div id="search-container">
-            <input id="search-input" placeholder="Search movie title..." />
-          </div> */}
         </div>
       </div>
     </div>

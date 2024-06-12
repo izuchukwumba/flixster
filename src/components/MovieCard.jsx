@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import "../styles/MovieCard.css";
 
 function MovieCard(props) {
@@ -16,7 +17,7 @@ function MovieCard(props) {
     return stars;
   };
   return (
-    <div id="movie-card">
+    <div className="movie-card" onClick={props.openModalFunction}>
       <div className="movie-image-container">
         <img className="movie-image" src={props.imgSrc} />
         <div className="movie-texts">
