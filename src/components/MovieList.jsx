@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import MovieCard from "./MovieCard";
+import MovieModal from "./MovieModal";
 import "../styles/MovieList.css";
 
 function MovieList() {
@@ -7,7 +8,8 @@ function MovieList() {
   const [pageNumber, setPageNumber] = useState(Math.floor(Math.random() * 20));
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOption, setSortOption] = useState("");
-  // const [pageNumber, setPageNumber] = useState(1);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedMovie, setSelectedMovie] = useState(null);
 
   let now_playing_url = `https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=${pageNumber}`;
   let search_query_url = `https://api.themoviedb.org/3/search/movie?query=${searchQuery}&include_adult=false&language=en-US&page=${pageNumber}`;
@@ -29,11 +31,14 @@ function MovieList() {
 
       console.log(data.results);
       const newMovies = data.results.map((movie) => ({
-        key: movie.id,
+        movie_key: movie.id,
         movie_title: movie.title,
         poster_url: "https://image.tmdb.org/t/p/w500" + movie.poster_path,
+        backdrop_url: "https://image.tmdb.org/t/p/w500" + movie.backdrop_path,
         movie_rating: movie.vote_average,
+        release_date: movie.release_date,
         year: parseInt(movie.release_date.substring(0, 4)),
+        overview: movie.overview,
       }));
 
       return newMovies;
@@ -129,6 +134,17 @@ function MovieList() {
   };
 
   //change sort option t sort order for less confusion
+  function handleOpenModal(movie) {
+    setSelectedMovie(movie);
+    setIsModalOpen(true);
+    console.log("movie is " + movie);
+    console.log("selectedMovie is " + selectedMovie);
+    console.log("modal" + isModalOpen);
+  }
+  function handleCloseModal() {
+    setSelectedMovie(null);
+    setIsModalOpen(false);
+  }
 
   return (
     <div id="movie-list-container">
@@ -178,13 +194,23 @@ function MovieList() {
         <div id="second-movie-list-container">
           <div id="movie-list">
             {movies.map((movie, index) => (
-              <MovieCard
-                key={index}
-                title={movie.movie_title}
-                imgSrc={movie.poster_url}
-                rating={movie.movie_rating}
-                release_year={movie.year}
-              />
+              <div>
+                <MovieCard
+                  openModalFunction={() => handleOpenModal(movie)}
+                  key_movie={movie.movie_key}
+                  title={movie.movie_title}
+                  imgSrc={movie.poster_url}
+                  rating={movie.movie_rating}
+                  release_date={movie.release_date}
+                  release_year={movie.year}
+                />
+                {isModalOpen && selectedMovie === movie && (
+                  <MovieModal
+                    movie={selectedMovie}
+                    closeModalFunction={handleCloseModal}
+                  />
+                )}
+              </div>
             ))}
           </div>
           <div id="load-more-button" onClick={handleLoadMoreClick}>
