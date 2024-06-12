@@ -33,7 +33,7 @@ function MovieList() {
         movie_title: movie.title,
         poster_url: "https://image.tmdb.org/t/p/w500" + movie.poster_path,
         movie_rating: movie.vote_average,
-        year: movie.release_date.substring(0, 4),
+        year: parseInt(movie.release_date.substring(0, 4)),
       }));
 
       return newMovies;
@@ -81,6 +81,16 @@ function MovieList() {
       });
       setMovies(sortedMoviesByTitle);
     };
+    const sortMoviesByReleaseDate = () => {
+      const sortedMoviesByReleaseDate = [...movies].sort((a, b) => {
+        if (sort_order === "release-date-AZ") {
+          return a.year - b.year;
+        } else if (sort_order === "release-date-ZA") {
+          return b.year - a.year;
+        }
+      });
+      setMovies(sortedMoviesByReleaseDate);
+    };
 
     const sortMoviesByRating = () => {
       const sortedMoviesByRating = [...movies].sort((a, b) => {
@@ -96,6 +106,11 @@ function MovieList() {
       sortMoviesByTitle();
     } else if (sort_order === "rating-AZ" || sort_order === "rating-ZA") {
       sortMoviesByRating();
+    } else if (
+      sort_order === "release-date-AZ" ||
+      sort_order === "release-date-ZA"
+    ) {
+      sortMoviesByReleaseDate();
     }
 
     console.log(sort_order);
@@ -134,10 +149,20 @@ function MovieList() {
             onChange={handleSortChange}
           >
             <option value="">Choose sorting option</option>
-            <option value="movie-title-AZ">Sort by movie title (a-z)</option>
-            <option value="movie-title-ZA">Sort by movie title (z-a)</option>
-            <option value="rating-AZ">Sort by rating (0-10)</option>
-            <option value="rating-ZA">Sort by rating (10-0)</option>
+            <option value="movie-title-AZ">
+              Sort by movie title (accending)
+            </option>
+            <option value="movie-title-ZA">
+              Sort by movie title (decending)
+            </option>
+            <option value="release-date-AZ">
+              Sort by release date (accending)
+            </option>
+            <option value="release-date-ZA">
+              Sort by release date (decending)
+            </option>
+            <option value="rating-AZ">Sort by rating (accending)</option>
+            <option value="rating-ZA">Sort by rating (decending)</option>
           </select>
         </div>
       </div>
