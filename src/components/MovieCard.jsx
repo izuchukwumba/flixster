@@ -11,8 +11,8 @@ function MovieCard(props) {
 
   const renderStars = (rating) => {
     const stars = [];
-    for (let i = 0; i <= 4; i++) {
-      if (i < rating / 2.8) {
+    for (let i = 0; i <= 5; i++) {
+      if (i < rating / 2) {
         stars.push(filledStar);
       } else {
         stars.push(emptyStar);
@@ -23,7 +23,6 @@ function MovieCard(props) {
 
   const { favoriteMovies, setFavoriteMovies } = useFavoriteMovies();
   const { watchedMovies, setWatchedMovies } = useWatchedMovies();
-  // console.log(favoriteMovies);
 
   const handleFavoriteClick = (event) => {
     event.stopPropagation();
@@ -37,8 +36,6 @@ function MovieCard(props) {
     }
   };
 
-  // console.log(watchedMovies);
-
   const handleWatchedClick = (event) => {
     event.stopPropagation();
     setIsWatched(!isWatched);
@@ -49,7 +46,6 @@ function MovieCard(props) {
         [...prev].filter((item) => item !== props.movie)
       );
     }
-    // event.stopPropagation();
   };
 
   return (
@@ -63,9 +59,9 @@ function MovieCard(props) {
               <i
                 className={`${
                   isFavorite ? "fa-solid" : !isFavorite ? "fa-regular" : ""
-                } fa-heart  favorite-icon`}
+                } fa-star  favorite-icon`}
                 onClick={handleFavoriteClick}
-                style={{ color: isFavorite ? "red" : "white" }}
+                style={{ color: isFavorite ? "lime" : "white" }}
               ></i>
             </div>
           </div>
@@ -75,15 +71,13 @@ function MovieCard(props) {
               <span className="rating-value">{props.rating}</span>
             </div>
             <div className="release-year">{props.release_year}</div>
-            <div className="watched-btn">
-              <label>
-                <input
-                  type="checkbox"
-                  checked={isWatched}
-                  onClick={handleWatchedClick}
-                />
-              </label>
-            </div>
+            <label className="watched-check-btn">
+              <input
+                type="checkbox"
+                checked={isWatched}
+                onClick={handleWatchedClick}
+              />
+            </label>
           </div>
         </div>
       </div>
