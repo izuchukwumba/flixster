@@ -7,7 +7,8 @@ import { useWatchedMovies } from "./context/WatchedMovieContext";
 
 function MovieList() {
   const [movies, setMovies] = useState([]);
-  const [pageNumber, setPageNumber] = useState(Math.floor(Math.random() * 20));
+  let INITIAL_PAGE_NUMBER = Math.floor(Math.random() * 20);
+  const [pageNumber, setPageNumber] = useState(INITIAL_PAGE_NUMBER);
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOption, setSortOption] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -56,11 +57,18 @@ function MovieList() {
   };
 
   useEffect(() => {
-    (async () => {
-      const initialMovies = await getMovies(now_playing_url);
-      setMovies(initialMovies);
-    })();
-  }, []);
+    if (pageNumber !== INITIAL_PAGE_NUMBER) {
+      (async () => {
+        const newMovies = await getMovies(now_playing_url);
+        setMovies((prevMovies) => [...prevMovies, ...newMovies]);
+      })();
+    } else {
+      (async () => {
+        const initialMovies = await getMovies(now_playing_url);
+        setMovies(initialMovies);
+      })();
+    }
+  }, [pageNumber]);
 
   const handleLoadMoreClick = async () => {
     setPageNumber((pageNumber) => pageNumber + 1);
@@ -234,9 +242,9 @@ function MovieList() {
             movies
           </div>
           <div className="side-bar-favorite-movies-container">
-            {favoriteMovies.map((movie) => {
+            {favoriteMovies.map((movie, index) => {
               return (
-                <div className="side-bar-favorite-movie">
+                <div className="side-bar-favorite-movie" key={index}>
                   <div className="side-bar-favorite-movie-image-container">
                     <img
                       src={movie.poster_url}
@@ -257,9 +265,9 @@ function MovieList() {
           movies
         </div>
         <div className="side-bar-watched-movies-container">
-          {watchedMovies.map((movie) => {
+          {watchedMovies.map((movie, index) => {
             return (
-              <div className="side-bar-watched-movie">
+              <div className="side-bar-watched-movie" key={index}>
                 <div className="side-bar-watched-movie-image-container">
                   <img
                     src={movie.poster_url}
