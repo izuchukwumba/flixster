@@ -3,6 +3,7 @@ import MovieCard from "./MovieCard";
 import MovieModal from "./MovieModal";
 import "../styles/MovieList.css";
 import { useFavoriteMovies } from "./context/FavoriteMovieContext";
+import { useWatchedMovies } from "./context/WatchedMovieContext";
 
 function MovieList() {
   const [movies, setMovies] = useState([]);
@@ -13,7 +14,8 @@ function MovieList() {
   const [selectedMovie, setSelectedMovie] = useState(null);
 
   const { favoriteMovies, setFavoriteMovies } = useFavoriteMovies();
-  console.log(favoriteMovies);
+  const { watchedMovies, setWatchedMovies } = useWatchedMovies();
+  // console.log(favoriteMovies);
 
   let now_playing_url = `https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=${pageNumber}`;
   let search_query_url = `https://api.themoviedb.org/3/search/movie?query=${searchQuery}&include_adult=false&language=en-US&page=${pageNumber}`;
@@ -231,10 +233,10 @@ function MovieList() {
             <br />
             movies
           </div>
-          <div className="side-bar-favorite-movies">
+          <div className="side-bar-favorite-movies-container">
             {favoriteMovies.map((movie) => {
               return (
-                <div className="specific-favorite-movie-container">
+                <div className="side-bar-favorite-movie">
                   <div className="side-bar-favorite-movie-image-container">
                     <img
                       src={movie.poster_url}
@@ -249,12 +251,27 @@ function MovieList() {
             })}
           </div>
         </div>
+        <div className="side-bar-watched-movies-header side-bar-header">
+          watched
+          <br />
+          movies
+        </div>
         <div className="side-bar-watched-movies-container">
-          <div className="side-bar-watched-movies-header side-bar-header">
-            watched
-            <br />
-            movies
-          </div>
+          {watchedMovies.map((movie) => {
+            return (
+              <div className="side-bar-watched-movie">
+                <div className="side-bar-watched-movie-image-container">
+                  <img
+                    src={movie.poster_url}
+                    className="side-bar-watched-movie-image"
+                  />
+                </div>
+                <div className="side-bar-watched-movie-title">
+                  {movie.movie_title}
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>

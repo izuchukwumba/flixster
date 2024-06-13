@@ -1,9 +1,11 @@
 import React, { useState, useContext, useEffect } from "react";
 import "../styles/MovieCard.css";
 import { useFavoriteMovies } from "./context/FavoriteMovieContext";
+import { useWatchedMovies } from "./context/WatchedMovieContext";
 
 function MovieCard(props) {
   const [isFavorite, setIsFavorite] = useState(false);
+  const [isWatched, setIsWatched] = useState(false);
   const emptyStar = <i className="fa-regular fa-star stars empty-star"></i>;
   const filledStar = <i className="fa-solid fa-star stars filled-star"></i>;
 
@@ -20,20 +22,34 @@ function MovieCard(props) {
   };
 
   const { favoriteMovies, setFavoriteMovies } = useFavoriteMovies();
+  const { watchedMovies, setWatchedMovies } = useWatchedMovies();
   // console.log(favoriteMovies);
 
   const handleFavoriteClick = (event) => {
+    event.stopPropagation();
+    setIsFavorite(!isFavorite);
     if (!isFavorite) {
-      setIsFavorite(!isFavorite);
       setFavoriteMovies((prev) => [...prev, props.movie]);
     } else if (isFavorite) {
-      setIsFavorite(!isFavorite);
-      event.stopPropagation();
       setFavoriteMovies((prev) =>
         [...prev].filter((item) => item !== props.movie)
       );
     }
+  };
+
+  // console.log(watchedMovies);
+
+  const handleWatchedClick = (event) => {
     event.stopPropagation();
+    setIsWatched(!isWatched);
+    if (!isWatched) {
+      setWatchedMovies((prev) => [...prev, props.movie]);
+    } else if (isWatched) {
+      setWatchedMovies((prev) =>
+        [...prev].filter((item) => item !== props.movie)
+      );
+    }
+    // event.stopPropagation();
   };
 
   return (
@@ -59,6 +75,15 @@ function MovieCard(props) {
               <span className="rating-value">{props.rating}</span>
             </div>
             <div className="release-year">{props.release_year}</div>
+            <div className="watched-btn">
+              <label>
+                <input
+                  type="checkbox"
+                  checked={isWatched}
+                  onClick={handleWatchedClick}
+                />
+              </label>
+            </div>
           </div>
         </div>
       </div>
