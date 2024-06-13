@@ -37,7 +37,9 @@ function MovieModal({ movie, closeModalFunction }) {
           <div>
             <span>Overview:</span>
             <br />
-            <span className="modal-overview">{movie.overview}</span>
+            <span className="modal-overview">
+              {movie.overview.substring(0, 300) + "..."}
+            </span>
           </div>
         </div>
         <div className="modal-backdrop-container">

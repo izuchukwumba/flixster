@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import MovieCard from "./MovieCard";
 import MovieModal from "./MovieModal";
 import "../styles/MovieList.css";
+import { useFavoriteMovies } from "./context/FavoriteMovieContext";
 
 function MovieList() {
   const [movies, setMovies] = useState([]);
@@ -10,6 +11,9 @@ function MovieList() {
   const [sortOption, setSortOption] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState(null);
+
+  const { favoriteMovies, setFavoriteMovies } = useFavoriteMovies();
+  console.log(favoriteMovies);
 
   let now_playing_url = `https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=${pageNumber}`;
   let search_query_url = `https://api.themoviedb.org/3/search/movie?query=${searchQuery}&include_adult=false&language=en-US&page=${pageNumber}`;
@@ -29,8 +33,9 @@ function MovieList() {
       const response = await fetch(url, options);
       const data = await response.json();
 
-      console.log(data.results);
+      // console.log(data.results);
       const newMovies = data.results.map((movie) => ({
+        movie: movie,
         movie_key: movie.id,
         movie_title: movie.title,
         poster_url: "https://image.tmdb.org/t/p/w500" + movie.poster_path,
@@ -124,6 +129,7 @@ function MovieList() {
   useEffect(() => {
     sortMovies(sortOption);
   }, [sortOption]);
+  // console.log("before" + pageNumber);
 
   const handleSortChange = (event) => {
     const selected_option = event.target.value;
@@ -131,6 +137,7 @@ function MovieList() {
     if (sortOption === "movie-title-AZ" || sortOption === "movie-title-ZA") {
       sortMovies(sortOption);
     }
+    // console.log("after" + pageNumber);
   };
 
   //change sort option t sort order for less confusion
@@ -157,30 +164,28 @@ function MovieList() {
           onChange={handleSearchChange}
         />
 
-        <div id="sort-btns">
-          <select
-            // value={sort_option}
-            name="sort-options"
-            id="sort-options"
-            onChange={handleSortChange}
-          >
-            <option value="">Choose sorting option</option>
-            <option value="movie-title-AZ">
-              Sort by movie title (accending)
-            </option>
-            <option value="movie-title-ZA">
-              Sort by movie title (decending)
-            </option>
-            <option value="release-date-AZ">
-              Sort by release date (accending)
-            </option>
-            <option value="release-date-ZA">
-              Sort by release date (decending)
-            </option>
-            <option value="rating-AZ">Sort by rating (accending)</option>
-            <option value="rating-ZA">Sort by rating (decending)</option>
-          </select>
-        </div>
+        <select
+          // value={sort_option}
+          name="sort-options"
+          id="sort-options"
+          onChange={handleSortChange}
+        >
+          <option value="">Choose sorting option</option>
+          <option value="movie-title-AZ">
+            Sort by movie title (accending)
+          </option>
+          <option value="movie-title-ZA">
+            Sort by movie title (decending)
+          </option>
+          <option value="release-date-AZ">
+            Sort by release date (accending)
+          </option>
+          <option value="release-date-ZA">
+            Sort by release date (decending)
+          </option>
+          <option value="rating-AZ">Sort by rating (accending)</option>
+          <option value="rating-ZA">Sort by rating (decending)</option>
+        </select>
       </div>
       {movies.length === 0 ? (
         <div id="loading-state-container">
@@ -197,6 +202,7 @@ function MovieList() {
               <div>
                 <MovieCard
                   openModalFunction={() => handleOpenModal(movie)}
+                  movie={movie}
                   key_movie={movie.movie_key}
                   title={movie.movie_title}
                   imgSrc={movie.poster_url}
@@ -218,6 +224,39 @@ function MovieList() {
           </div>
         </div>
       )}
+      <div className="side-bar">
+        <div className="side-bar-favorite-movies-container">
+          <div className="side-bar-favorite-movies-header side-bar-header">
+            favorite
+            <br />
+            movies
+          </div>
+          <div className="side-bar-favorite-movies">
+            {favoriteMovies.map((movie) => {
+              return (
+                <div className="specific-favorite-movie-container">
+                  <div className="side-bar-favorite-movie-image-container">
+                    <img
+                      src={movie.poster_url}
+                      className="side-bar-favorite-movie-image"
+                    />
+                  </div>
+                  <div className="side-bar-favorite-movie-title">
+                    {movie.movie_title}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+        <div className="side-bar-watched-movies-container">
+          <div className="side-bar-watched-movies-header side-bar-header">
+            watched
+            <br />
+            movies
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
