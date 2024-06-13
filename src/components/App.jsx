@@ -4,19 +4,21 @@ import Navbar from "./Navbar";
 import MovieList from "./MovieList";
 import Footer from "./Footer";
 import FavoriteMovieContextProvider from "./context/FavoriteMovieContext";
-("./context/FavoriteMovieContext");
+import WatchedMovieContextProvider from "./context/WatchedMovieContext";
 
 function App() {
   const [isFavorite, setIsFavorite] = useState(false);
 
   return (
-    <FavoriteMovieContextProvider>
-      <>
-        <Navbar />
-        <MovieList />
-        <Footer />
-      </>
-    </FavoriteMovieContextProvider>
+    <WatchedMovieContextProvider>
+      <FavoriteMovieContextProvider>
+        <>
+          <Navbar />
+          <MovieList />
+          <Footer />
+        </>
+      </FavoriteMovieContextProvider>
+    </WatchedMovieContextProvider>
   );
 }
 

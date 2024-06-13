@@ -110,18 +110,21 @@ select {
   margin-bottom: 5px;
 }
 .side-bar-favorite-movies-container {
-  margin-bottom: 20px;
+  margin-bottom: 50px;
 }
-.side-bar-favorite-movie-image {
+.side-bar-favorite-movie-image,
+.side-bar-watched-movie-image {
   width: 70px;
 }
-.side-bar-favorite-movie-title {
-  width: 70px;
+.side-bar-favorite-movie-title,
+.side-bar-watched-movie-title {
+  width: 60px;
   color: gold;
   font-family: "Montserrat";
   font-size: 0.5rem;
   text-align: center;
 }
-.specific-favorite-movie-container {
+.side-bar-favorite-movie,
+.side-bar-watched-movie {
   margin-bottom: 7px;
 }
