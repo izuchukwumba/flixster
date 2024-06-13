@@ -11,11 +11,22 @@
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
 }
+.movie-title-and-like-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  /* gap: 50px; */
+  width: 200px;
+}
+.favorite-icon {
+  font-size: 0.8rem;
+  z-index: 10;
+}
 .movie-texts {
   padding: 5px 0 5px 5px;
 }
 .movie-title {
-  width: 200px;
+  width: 190px;
   font-family: "Space Grotesk";
   font-weight: 600;
 }

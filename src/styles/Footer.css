@@ -1,0 +1,20 @@
+footer {
+  background-color: #1c1c1c;
+  border-top: 1px solid gold;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  bottom: 0;
+  width: 100%;
+  padding: 10px 0;
+}
+.footer-app-name {
+  font-family: "Chakra Petch";
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+.footer-copyright {
+  font-family: "Poppins";
+}

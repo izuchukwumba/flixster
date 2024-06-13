@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import "../styles/MovieCard.css";
+import { useFavoriteMovies } from "./context/FavoriteMovieContext";
 
 function MovieCard(props) {
+  const [isFavorite, setIsFavorite] = useState(false);
   const emptyStar = <i className="fa-regular fa-star stars empty-star"></i>;
   const filledStar = <i className="fa-solid fa-star stars filled-star"></i>;
 
@@ -16,12 +18,41 @@ function MovieCard(props) {
     }
     return stars;
   };
+
+  const { favoriteMovies, setFavoriteMovies } = useFavoriteMovies();
+  // console.log(favoriteMovies);
+
+  const handleFavoriteClick = (event) => {
+    if (!isFavorite) {
+      setIsFavorite(!isFavorite);
+      setFavoriteMovies((prev) => [...prev, props.movie]);
+    } else if (isFavorite) {
+      setIsFavorite(!isFavorite);
+      event.stopPropagation();
+      setFavoriteMovies((prev) =>
+        [...prev].filter((item) => item !== props.movie)
+      );
+    }
+    event.stopPropagation();
+  };
+
   return (
     <div className="movie-card" onClick={props.openModalFunction}>
       <div className="movie-image-container">
         <img className="movie-image" src={props.imgSrc} />
         <div className="movie-texts">
-          <div className="movie-title">{props.title}</div>
+          <div className="movie-title-and-like-container">
+            <div className="movie-title">{props.title}</div>
+            <div>
+              <i
+                className={`${
+                  isFavorite ? "fa-solid" : !isFavorite ? "fa-regular" : ""
+                } fa-heart  favorite-icon`}
+                onClick={handleFavoriteClick}
+                style={{ color: isFavorite ? "red" : "white" }}
+              ></i>
+            </div>
+          </div>
           <div id="movie-card-last-line">
             <div className="rating-container">
               <span className="rating-stars">{renderStars(props.rating)}</span>
