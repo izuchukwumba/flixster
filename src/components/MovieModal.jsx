@@ -4,6 +4,7 @@ import "../styles/MovieModal.css";
 function MovieModal({ movie, closeModalFunction }) {
   const [genre, setGenre] = useState([]);
   const [trailerKey, setTrailerKey] = useState(null);
+  const [runtime, setRuntime] = useState(null);
 
   const fetchTrailer = async (movie_id) => {
     const url = `https://api.themoviedb.org/3/movie/${movie_id}/videos?language=en-US`;
@@ -90,6 +91,49 @@ function MovieModal({ movie, closeModalFunction }) {
   // console.log(fetchGenre(movie.movie_key));
 
   // console.log("Trailer", trailerKey);
+
+  const fetchRuntime = async (id) => {
+    const url = `https://api.themoviedb.org/3/movie/${id}?language=en-US`;
+
+    const options = {
+      method: "GET",
+      headers: {
+        accept: "application/json",
+        Authorization:
+          "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlMzc0ZmExNjZhZmQ3MzlkNDAyMmY0ODIwZWY5NjFjZCIsInN1YiI6IjY2Njc3MDBkM2U4MGUzOTAxNmQwMTgyMiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.tm1UvZ7xHYWI1QTk3Hk7V79Z5lypAMTIKaMudAOSpvw",
+      },
+    };
+    try {
+      const response = await fetch(url, options);
+      const data = await response.json();
+      console.log("API run time response", data);
+      return data;
+    } catch (err) {
+      console.error("error:" + err);
+      return [];
+    }
+  };
+
+  useEffect(() => {
+    const getRuntime = async () => {
+      const movie_runtime_data = await fetchRuntime(movie.movie_key);
+      // console.log("Movie videos", movie_videos_data);
+
+      // const officialTrailer = movie_videos_data.find((video) => {
+      //   return video.type.trim().toLowerCase() === "trailer";
+      // });
+      console.log("Runtime Data", movie_runtime_data);
+      setRuntime(movie_runtime_data.runtime);
+    };
+
+    if (movie.movie_key) getRuntime();
+
+    // console.log("Trailer", trailer);
+  }, [movie]);
+  console.log("Runtime", runtime);
+
+  //TODO: put genre, trailer, and runtime fetch functions in one and
+  //call them seperately in useefect to avoid repetitions
   return (
     <div className="overall-modal-container">
       <div className="modal-container">
@@ -126,7 +170,7 @@ function MovieModal({ movie, closeModalFunction }) {
                 Genre:
                 <br />
                 <span className="genre-value modal-detail">
-                  {genre.join(", ")}
+                  {genre.length !== 0 ? genre.join(", ") : "Unavailable"}
                 </span>
               </span>
             </div>
@@ -134,7 +178,9 @@ function MovieModal({ movie, closeModalFunction }) {
               <span className="modal-detail-heading">
                 Runtime:
                 <br />
-                <span className="modal-movie-runtime modal-detail"></span>
+                <span className="modal-movie-runtime modal-detail">
+                  {runtime}
+                </span>
               </span>
             </div>
           </div>

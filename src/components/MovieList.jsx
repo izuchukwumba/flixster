@@ -229,91 +229,7 @@ function MovieList() {
   }
 
   return (
-    <div id="movie-list-container">
-      <div id="search-and-sort-container">
-        <input
-          id="search-input"
-          placeholder="Search movie title..."
-          type="text"
-          value={searchQuery}
-          onChange={handleSearchChange}
-        />
-
-        <select
-          // value={sort_option}
-          name="sort-options"
-          id="sort-options"
-          onChange={handleSortChange}
-        >
-          <option value="">Choose sorting option</option>
-          <option value="movie-title-AZ">
-            Sort by movie title (accending)
-          </option>
-          <option value="movie-title-ZA">
-            Sort by movie title (decending)
-          </option>
-          <option value="release-date-AZ">
-            Sort by release date (accending)
-          </option>
-          <option value="release-date-ZA">
-            Sort by release date (decending)
-          </option>
-          <option value="rating-AZ">Sort by rating (accending)</option>
-          <option value="rating-ZA">Sort by rating (decending)</option>
-        </select>
-        <select
-          // value={sort_option}
-          name="filter-options"
-          id="filter-options"
-          onChange={handleFilterChange}
-        >
-          <option value="">Filter movies by genre</option>
-          <option value="action">Action</option>
-          <option value="adventure">Adventure</option>
-          <option value="comedy">Comedy</option>
-          <option value="documentary">Documentary</option>
-          <option value="drama">Drama</option>
-          <option value="romance">Romance</option>
-          <option value="thriller">Thriller</option>
-        </select>
-      </div>
-      {movies.length === 0 ? (
-        <div id="loading-state-container">
-          <div id="loading-state"></div>
-        </div>
-      ) : movies[0] === "none" ? (
-        <div>
-          <div>No movies found</div>
-        </div>
-      ) : (
-        <div id="second-movie-list-container">
-          <div id="movie-list">
-            {movies.map((movie, index) => (
-              <div>
-                <MovieCard
-                  openModalFunction={() => handleOpenModal(movie)}
-                  movie={movie}
-                  key_movie={movie.movie_key}
-                  title={movie.movie_title}
-                  imgSrc={movie.poster_url}
-                  rating={movie.movie_rating}
-                  release_date={movie.release_date}
-                  release_year={movie.year}
-                />
-                {isModalOpen && selectedMovie === movie && (
-                  <MovieModal
-                    movie={selectedMovie}
-                    closeModalFunction={handleCloseModal}
-                  />
-                )}
-              </div>
-            ))}
-          </div>
-          <div id="load-more-button" onClick={handleLoadMoreClick}>
-            Load More
-          </div>
-        </div>
-      )}
+    <div id="all-in-movie-list-container">
       <div className="side-bar">
         <div className="side-bar-favorite-movies-container">
           <div className="side-bar-favorite-movies-header side-bar-header">
@@ -361,6 +277,95 @@ function MovieList() {
             );
           })}
         </div>
+      </div>
+
+      <div className="main-in-movie-list-container">
+        <div id="search-and-sort-container">
+          <input
+            id="search-input"
+            placeholder="Search movie title..."
+            type="text"
+            value={searchQuery}
+            onChange={handleSearchChange}
+          />
+
+          <select
+            // value={sort_option}
+            name="sort-options"
+            id="sort-options"
+            onChange={handleSortChange}
+          >
+            <option value="">Choose sorting option</option>
+            <option value="movie-title-AZ">
+              Sort by movie title (accending)
+            </option>
+            <option value="movie-title-ZA">
+              Sort by movie title (decending)
+            </option>
+            <option value="release-date-AZ">
+              Sort by release date (accending)
+            </option>
+            <option value="release-date-ZA">
+              Sort by release date (decending)
+            </option>
+            <option value="rating-AZ">Sort by rating (accending)</option>
+            <option value="rating-ZA">Sort by rating (decending)</option>
+          </select>
+          <select
+            // value={sort_option}
+            name="filter-options"
+            id="filter-options"
+            onChange={handleFilterChange}
+          >
+            <option value="">Filter movies by genre</option>
+            <option value="action">Action</option>
+            <option value="adventure">Adventure</option>
+            <option value="comedy">Comedy</option>
+            <option value="documentary">Documentary</option>
+            <option value="drama">Drama</option>
+            <option value="romance">Romance</option>
+            <option value="thriller">Thriller</option>
+          </select>
+        </div>
+        {movies.length === 0 ? (
+          <div id="loading-state-container">
+            <div id="loading-state"></div>
+          </div>
+        ) : movies[0] === "none" ? (
+          <div>
+            <div>No movies found</div>
+          </div>
+        ) : (
+          <div id="movie-list-plus-load-more-container">
+            <div id="movie-list-dumb-container">
+              <div id="movie-list">
+                {movies.map((movie, index) => (
+                  <div>
+                    <MovieCard
+                      openModalFunction={() => handleOpenModal(movie)}
+                      movie={movie}
+                      key_movie={movie.movie_key}
+                      title={movie.movie_title}
+                      imgSrc={movie.poster_url}
+                      rating={movie.movie_rating}
+                      release_date={movie.release_date}
+                      release_year={movie.year}
+                    />
+                    {isModalOpen && selectedMovie === movie && (
+                      <MovieModal
+                        movie={selectedMovie}
+                        closeModalFunction={handleCloseModal}
+                      />
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div id="load-more-button" onClick={handleLoadMoreClick}>
+              Load More
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

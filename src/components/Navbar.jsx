@@ -11,10 +11,10 @@ function Navbar() {
         <div id="nav-texts">
           <div id="app-name">Flixster Flick</div>
           <div id="nav-sections">
-            <div>Home</div>
-            <div>Categories</div>
-            <div>Watchlist</div>
-            <div>Settings</div>
+            <div onClick={() => alert("Coming soon")}>Home</div>
+            <div onClick={() => alert("Coming soon")}>Categories</div>
+            <div onClick={() => alert("Coming soon")}>Watchlist</div>
+            <div onClick={() => alert("Coming soon")}>Settings</div>
           </div>
         </div>
 
