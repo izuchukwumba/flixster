@@ -44,7 +44,6 @@
 .main-in-movie-list-container {
   display: flex;
   flex-direction: column;
-  /* justify-content: center; */
   align-items: center;
 }
 
@@ -77,12 +76,6 @@ select {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-}
-#movie-list-dumb-container {
-  /* width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center; */
 }
 #movie-list {
   display: flex;

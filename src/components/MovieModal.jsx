@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import "../styles/MovieModal.css";
+import { useGenre } from "./context/GenreContext";
 
 function MovieModal({ movie, closeModalFunction }) {
-  const [genre, setGenre] = useState([]);
+  const { genre, setGenre } = useGenre();
   const [trailerKey, setTrailerKey] = useState(null);
   const [runtime, setRuntime] = useState(null);
 
+  //Get Trailer key data
   const fetchTrailer = async (movie_id) => {
     const url = `https://api.themoviedb.org/3/movie/${movie_id}/videos?language=en-US`;
     const options = {
@@ -19,10 +21,8 @@ function MovieModal({ movie, closeModalFunction }) {
     try {
       const response = await fetch(url, options);
       const data = await response.json();
-      // console.log("API response", data);
       return data.results;
     } catch (err) {
-      // console.error("error:" + err);
       return [];
     }
   };
@@ -30,20 +30,17 @@ function MovieModal({ movie, closeModalFunction }) {
   useEffect(() => {
     const getTrailer = async () => {
       const movie_videos_data = await fetchTrailer(movie.movie_key);
-      // console.log("Movie videos", movie_videos_data);
 
       const officialTrailer = movie_videos_data.find((video) => {
         return video.type.trim().toLowerCase() === "trailer";
       });
-      // console.log("Official trailer", officialTrailer);
       setTrailerKey(officialTrailer.key);
     };
 
     if (movie.movie_key) getTrailer();
-
-    // console.log("Trailer", trailer);
   }, [movie]);
 
+  //Get Genre data
   const fetchGenre = async () => {
     const url = `https://api.themoviedb.org/3/genre/movie/list?language=en`;
 
@@ -58,7 +55,6 @@ function MovieModal({ movie, closeModalFunction }) {
     try {
       const response = await fetch(url, options);
       const data = await response.json();
-      console.log("API response", data);
       return data;
     } catch (err) {
       console.error("error:" + err);
@@ -70,28 +66,21 @@ function MovieModal({ movie, closeModalFunction }) {
     const getGenre = async () => {
       const all_movie_genres = await fetchGenre();
       const movie_genres = all_movie_genres["genres"];
-      console.log("Movie genres", movie_genres);
       setGenre([]);
 
       for (let i = 0; i < movie.movie.genre_ids.length; i++) {
         let specific_movie_genre = movie_genres.find(
           (genre) => genre.id === movie.movie.genre_ids[i]
         );
-        console.log("specific_movie_genre", specific_movie_genre);
         if (specific_movie_genre) {
           setGenre((prev) => [...prev, specific_movie_genre.name]);
         }
       }
-
-      // setGenre(specific_movie_genre.name);
     };
     getGenre();
   }, [movie]);
-  console.log("genre", genre);
-  // console.log(fetchGenre(movie.movie_key));
 
-  // console.log("Trailer", trailerKey);
-
+  //Get Runtime data
   const fetchRuntime = async (id) => {
     const url = `https://api.themoviedb.org/3/movie/${id}?language=en-US`;
 
@@ -106,7 +95,6 @@ function MovieModal({ movie, closeModalFunction }) {
     try {
       const response = await fetch(url, options);
       const data = await response.json();
-      console.log("API run time response", data);
       return data;
     } catch (err) {
       console.error("error:" + err);
@@ -117,20 +105,11 @@ function MovieModal({ movie, closeModalFunction }) {
   useEffect(() => {
     const getRuntime = async () => {
       const movie_runtime_data = await fetchRuntime(movie.movie_key);
-      // console.log("Movie videos", movie_videos_data);
-
-      // const officialTrailer = movie_videos_data.find((video) => {
-      //   return video.type.trim().toLowerCase() === "trailer";
-      // });
-      console.log("Runtime Data", movie_runtime_data);
       setRuntime(movie_runtime_data.runtime);
     };
 
     if (movie.movie_key) getRuntime();
-
-    // console.log("Trailer", trailer);
   }, [movie]);
-  console.log("Runtime", runtime);
 
   //TODO: put genre, trailer, and runtime fetch functions in one and
   //call them seperately in useefect to avoid repetitions

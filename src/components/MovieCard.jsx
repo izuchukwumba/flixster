@@ -9,6 +9,7 @@ function MovieCard(props) {
   const emptyStar = <i className="fa-regular fa-star stars empty-star"></i>;
   const filledStar = <i className="fa-solid fa-star stars filled-star"></i>;
 
+  //Rendring appearance of the stars based on movie rating
   const renderStars = (rating) => {
     const stars = [];
     for (let i = 0; i <= 5; i++) {
@@ -24,6 +25,7 @@ function MovieCard(props) {
   const { favoriteMovies, setFavoriteMovies } = useFavoriteMovies();
   const { watchedMovies, setWatchedMovies } = useWatchedMovies();
 
+  //Favorite button function
   const handleFavoriteClick = (event) => {
     event.stopPropagation();
     setIsFavorite(!isFavorite);
@@ -36,6 +38,7 @@ function MovieCard(props) {
     }
   };
 
+  //Watched button function
   const handleWatchedClick = (event) => {
     event.stopPropagation();
     setIsWatched(!isWatched);
