@@ -18,10 +18,10 @@ function MovieModal({ movie, closeModalFunction }) {
     try {
       const response = await fetch(url, options);
       const data = await response.json();
-      console.log("API response", data);
+      // console.log("API response", data);
       return data.results;
     } catch (err) {
-      console.error("error:" + err);
+      // console.error("error:" + err);
       return [];
     }
   };
@@ -29,18 +29,12 @@ function MovieModal({ movie, closeModalFunction }) {
   useEffect(() => {
     const getTrailer = async () => {
       const movie_videos_data = await fetchTrailer(movie.movie_key);
-      console.log("Movie videos", movie_videos_data);
-
-      // let dumbArray = [];
-      // movie_videos_data.forEach((video) => {
-      //   dumbArray.push(video.name);
-      // });
-      // console.log("Dumb array", dumbArray);
+      // console.log("Movie videos", movie_videos_data);
 
       const officialTrailer = movie_videos_data.find((video) => {
         return video.type.trim().toLowerCase() === "trailer";
       });
-      console.log("Official trailer", officialTrailer);
+      // console.log("Official trailer", officialTrailer);
       setTrailerKey(officialTrailer.key);
     };
 
@@ -73,18 +67,29 @@ function MovieModal({ movie, closeModalFunction }) {
 
   useEffect(() => {
     const getGenre = async () => {
-      const movie_genre_data = await fetchGenre();
-      console.log("Movie genre", movie_genre_data);
-      let movie_genre = movie_genre_data.geres.find(
-        (genre) => genre.id === movie.movie_key
-      );
-      setGenre(movie_genre.name);
+      const all_movie_genres = await fetchGenre();
+      const movie_genres = all_movie_genres["genres"];
+      console.log("Movie genres", movie_genres);
+      setGenre([]);
+
+      for (let i = 0; i < movie.movie.genre_ids.length; i++) {
+        let specific_movie_genre = movie_genres.find(
+          (genre) => genre.id === movie.movie.genre_ids[i]
+        );
+        console.log("specific_movie_genre", specific_movie_genre);
+        if (specific_movie_genre) {
+          setGenre((prev) => [...prev, specific_movie_genre.name]);
+        }
+      }
+
+      // setGenre(specific_movie_genre.name);
     };
+    getGenre();
   }, [movie]);
   console.log("genre", genre);
   // console.log(fetchGenre(movie.movie_key));
 
-  console.log("Trailer", trailerKey);
+  // console.log("Trailer", trailerKey);
   return (
     <div className="overall-modal-container">
       <div className="modal-container">
@@ -102,18 +107,35 @@ function MovieModal({ movie, closeModalFunction }) {
             <div>
               <span className="modal-detail-heading">Release Date:</span>
               <br />
-              <span className="modal-movie-release-date">
+              <span className="modal-movie-release-date modal-detail">
                 {movie.release_date}
               </span>
             </div>
             <div>
-              <span className="modal-detail-rating">Rating:</span>
+              <span className="modal-detail-rating modal-detail-heading">
+                Rating:
+              </span>
               <br />
-              <span className="modal-movie-rating">{movie.movie_rating}</span>
+              <span className="modal-movie-rating modal-detail">
+                {movie.movie_rating}
+              </span>
             </div>
 
             <div>
-              <span className="modal-detail-heading">Genre:</span>
+              <span className="modal-detail-heading">
+                Genre:
+                <br />
+                <span className="genre-value modal-detail">
+                  {genre.join(", ")}
+                </span>
+              </span>
+            </div>
+            <div>
+              <span className="modal-detail-heading">
+                Runtime:
+                <br />
+                <span className="modal-movie-runtime modal-detail"></span>
+              </span>
             </div>
           </div>
         </div>
@@ -128,11 +150,11 @@ function MovieModal({ movie, closeModalFunction }) {
           </div>
         </div>
         <div className="trailer-header">
-          {trailerKey ? "Watch Trailer" : "Trailer Not Found"}
+          {trailerKey ? "Movie Trailer" : "Trailer Not Found"}
         </div>
         {trailerKey ? (
           <iframe
-            src={`https://www.youtube.com/embed/${trailerKey}`}
+            src={`https://www.youtube.com/embed/${trailerKey}?autoplay=1`}
             allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
             title="Official Trailer"

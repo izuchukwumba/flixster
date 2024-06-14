@@ -55,6 +55,8 @@ function MovieCard(props) {
         <div className="movie-texts">
           <div className="movie-title-and-like-container">
             <div className="movie-title">{props.title}</div>
+            {/* <div className="movie-title">{props.title.substring(0, 20)}</div> */}
+
             <div>
               <i
                 className={`${
