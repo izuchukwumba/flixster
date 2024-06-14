@@ -57,15 +57,14 @@
 }
 .modal-detail {
   font-family: "Montserrat";
+  color: rgba(255, 215, 0, 0.8);
 }
 .modal-movie-date {
   font-family: "Chakra Petch";
 }
 .modal-movie-release-date {
-  color: gold;
 }
 .modal-movie-rating {
-  color: gold;
 }
 
 .modal-backdrop-container {

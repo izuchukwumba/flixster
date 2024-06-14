@@ -1,27 +1,95 @@
-#movie-list-container {
+#all-in-movie-list-container {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
   margin-top: 120px;
-  /* height: 100%; */
-  /* position: relative; */
 }
 
-#second-movie-list-container {
+.side-bar {
+  min-height: 100vh;
+  background-color: black;
+  border-right: 1px solid gold;
+  border-bottom: 1px solid gold;
+  padding: 130px 10px 20px 10px;
+  z-index: -1;
+}
+
+.side-bar-header {
+  color: white;
+  font-family: "Poppins";
+  font-size: 0.7rem;
+  text-transform: capitalize;
+  font-weight: 600;
+  line-height: 1.1;
+  text-align: center;
+  margin-bottom: 5px;
+}
+.side-bar-favorite-movies-container {
+  margin-bottom: 100px;
+}
+.side-bar-favorite-movie-image,
+.side-bar-watched-movie-image {
+  width: 70px;
+}
+.side-bar-favorite-movie-title,
+.side-bar-watched-movie-title {
+  width: 60px;
+  color: gold;
+  font-family: "Montserrat";
+  font-size: 0.5rem;
+  text-align: center;
+}
+.side-bar-favorite-movie,
+.side-bar-watched-movie {
+  margin-bottom: 7px;
+}
+.main-in-movie-list-container {
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  align-items: center;
+}
+
+#search-and-sort-container {
+  margin: 15px 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  width: 100%;
+}
+
+#search-input {
+  padding: 10px;
+  max-width: 30%;
+  border-radius: 7px;
+  font-family: "Poppins";
+}
+select {
+  appearance: none;
+  padding: 13px 10px;
+  border-radius: 7px;
+  max-width: 30%;
+  border: 1px solid grey;
+}
+
+#movie-list-plus-load-more-container {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
-
+#movie-list-dumb-container {
+  /* width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center; */
+}
 #movie-list {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
   gap: 30px;
-  margin-left: 200px;
 }
 #loading-state-container {
   display: flex;
@@ -46,28 +114,6 @@
   padding: 10px 100px;
 }
 
-#search-and-sort-container {
-  margin: 15px 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 50px;
-  width: 100vw;
-}
-
-#search-input {
-  padding: 10px;
-  width: 23%;
-  border-radius: 7px;
-  font-family: "Poppins";
-}
-select {
-  appearance: none;
-  padding: 10px 15px;
-  border-radius: 5px;
-  width: 30%;
-}
-
 #loading-state {
   width: 50px;
   padding: 8px;
@@ -85,46 +131,4 @@ select {
   to {
     transform: rotate(1turn);
   }
-}
-
-.side-bar {
-  position: fixed;
-  left: 0;
-  top: 0;
-  height: 100%;
-  background-color: black;
-  border-right: 1px solid gold;
-  /* transform: translate(-0%, -0%); */
-  padding: 130px 10px 20px 10px;
-  z-index: -1;
-}
-
-.side-bar-header {
-  color: white;
-  font-family: "Poppins";
-  font-size: 0.7rem;
-  text-transform: capitalize;
-  font-weight: 600;
-  line-height: 1.1;
-  text-align: center;
-  margin-bottom: 5px;
-}
-.side-bar-favorite-movies-container {
-  margin-bottom: 50px;
-}
-.side-bar-favorite-movie-image,
-.side-bar-watched-movie-image {
-  width: 70px;
-}
-.side-bar-favorite-movie-title,
-.side-bar-watched-movie-title {
-  width: 60px;
-  color: gold;
-  font-family: "Montserrat";
-  font-size: 0.5rem;
-  text-align: center;
-}
-.side-bar-favorite-movie,
-.side-bar-watched-movie {
-  margin-bottom: 7px;
 }
