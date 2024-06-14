@@ -4,6 +4,7 @@ import MovieModal from "./MovieModal";
 import "../styles/MovieList.css";
 import { useFavoriteMovies } from "./context/FavoriteMovieContext";
 import { useWatchedMovies } from "./context/WatchedMovieContext";
+import { useGenre } from "./context/GenreContext";
 
 function MovieList() {
   const [movies, setMovies] = useState([]);
@@ -14,10 +15,8 @@ function MovieList() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [filterOption, setFilterOption] = useState("");
-
   const { favoriteMovies, setFavoriteMovies } = useFavoriteMovies();
   const { watchedMovies, setWatchedMovies } = useWatchedMovies();
-  // console.log(favoriteMovies);
 
   let genre_id =
     filterOption === "action"
@@ -40,6 +39,7 @@ function MovieList() {
   let search_query_url = `https://api.themoviedb.org/3/search/movie?query=${searchQuery}&include_adult=false&language=en-US&page=${pageNumber}`;
   const filter_url = `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=original_title.asc&with_genres=${genre_id}`;
 
+  //Get Movies from the Now Playing API
   const getMovies = async (api_url) => {
     const url = api_url;
     const options = {
@@ -55,7 +55,6 @@ function MovieList() {
       const response = await fetch(url, options);
       const data = await response.json();
 
-      console.log("data", data.results);
       const newMovies = data.results.map((movie) => ({
         movie: movie,
         movie_key: movie.id,
@@ -67,7 +66,6 @@ function MovieList() {
         year: parseInt(movie.release_date.substring(0, 4)),
         overview: movie.overview,
       }));
-      // console.log("newMovies", newMovies);
       return newMovies;
     } catch (err) {
       console.error("error:" + err);
@@ -76,7 +74,6 @@ function MovieList() {
   };
 
   useEffect(() => {
-    // console.log(genre_id);
     if (pageNumber !== INITIAL_PAGE_NUMBER) {
       (async () => {
         const newMovies = await getMovies(now_playing_url);
@@ -90,15 +87,14 @@ function MovieList() {
     }
   }, [pageNumber]);
 
+  //Load More Function
   const handleLoadMoreClick = async () => {
     setPageNumber((pageNumber) => pageNumber + 1);
-    // const newMovies = await getMovies(now_playing_url);
-    // setMovies((prevMovies) => [...prevMovies, ...newMovies]);
   };
 
+  //Search Function
   const handleSearchChange = async (event) => {
     setSearchQuery(event.target.value);
-    console.log(searchQuery);
     setMovies([]);
     const searchResults = await getMovies(search_query_url);
 
@@ -106,10 +102,10 @@ function MovieList() {
       setMovies(searchResults);
     } else {
       setMovies(["none"]);
-      //TODO: fix this else statement so that it displays "No results found" aesthetically
     }
   };
 
+  //Sort Function
   function sortMovies(sort_order) {
     const sortMoviesByTitle = () => {
       const sortedMoviesByTitle = [...movies].sort((a, b) => {
@@ -152,35 +148,27 @@ function MovieList() {
     ) {
       sortMoviesByReleaseDate();
     }
-
-    console.log(sort_order);
   }
 
   useEffect(() => {
     sortMovies(sortOption);
   }, [sortOption]);
-  // console.log("before" + pageNumber);
 
+  //Sort Button Function
   const handleSortChange = (event) => {
     const selected_option = event.target.value;
     setSortOption(selected_option);
     if (sortOption === "movie-title-AZ" || sortOption === "movie-title-ZA") {
       sortMovies(sortOption);
     }
-    // console.log("after" + pageNumber);
   };
 
+  //Filter Function
   useEffect(() => {
     if (filterOption !== "") {
       const filterMovies = async () => {
-        console.log("xyz");
         setMovies([]);
         const newMovies = await getMovies(filter_url);
-        console.log("new filter movies", newMovies);
-        console.log(
-          "new movies tieles",
-          newMovies.map((item) => item.title)
-        );
         newMovies.map((item) => {
           setMovies((prev) => [
             ...prev,
@@ -196,32 +184,21 @@ function MovieList() {
             },
           ]);
         });
-        // };\
-        console.log("movies inside", movies);
       };
       filterMovies();
     }
   }, [filterOption]);
-  console.log("movies outside", movies);
 
-  console.log("getFilter", getMovies(filter_url));
-  console.log("filter option", filterOption);
+  //Filter Toggle function
   const handleFilterChange = (event) => {
     const filter_option = event.target.value;
     setFilterOption(filter_option);
-    // if (sortOption === "movie-title-AZ" || sortOption === "movie-title-ZA") {
-    //   sortMovies(sortOption);
-    // }
-    // // console.log("after" + pageNumber);
   };
 
-  //change sort option t sort order for less confusion
+  //Open & Close Modal Buttons
   function handleOpenModal(movie) {
     setSelectedMovie(movie);
     setIsModalOpen(true);
-    console.log("movie is " + movie);
-    console.log("selectedMovie is " + selectedMovie);
-    console.log("modal" + isModalOpen);
   }
   function handleCloseModal() {
     setSelectedMovie(null);
@@ -290,7 +267,6 @@ function MovieList() {
           />
 
           <select
-            // value={sort_option}
             name="sort-options"
             id="sort-options"
             onChange={handleSortChange}
@@ -312,7 +288,6 @@ function MovieList() {
             <option value="rating-ZA">Sort by rating (decending)</option>
           </select>
           <select
-            // value={sort_option}
             name="filter-options"
             id="filter-options"
             onChange={handleFilterChange}
@@ -353,6 +328,7 @@ function MovieList() {
                     />
                     {isModalOpen && selectedMovie === movie && (
                       <MovieModal
+                        onClick={(e) => e.stopPropagation()}
                         movie={selectedMovie}
                         closeModalFunction={handleCloseModal}
                       />
