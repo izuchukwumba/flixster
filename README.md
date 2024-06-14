@@ -18,7 +18,7 @@ Deployed Application (optional): [Flixster Deployed Site](https://flixster-qyi6.
 - [x] **Search Functionality**
   - [x] Users can search for movies and view the results in a grid.
   - [x] Users can clear results and view previous current movies displayed.
-- [ ] **Accessibility Features**
+- [x] **Accessibility Features**
   - [x] Website implements accessibility features (semantic HTML, color contrast, font sizing, alt text for images).
 - [x] **Responsive Design**
   - [x] Website implements responsive web design.
