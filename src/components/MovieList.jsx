@@ -13,13 +13,32 @@ function MovieList() {
   const [sortOption, setSortOption] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState(null);
+  const [filterOption, setFilterOption] = useState("");
 
   const { favoriteMovies, setFavoriteMovies } = useFavoriteMovies();
   const { watchedMovies, setWatchedMovies } = useWatchedMovies();
   // console.log(favoriteMovies);
 
+  let genre_id =
+    filterOption === "action"
+      ? 28
+      : filterOption === "adventure"
+      ? 12
+      : filterOption === "comedy"
+      ? 35
+      : filterOption === "documentary"
+      ? 99
+      : filterOption === "drama"
+      ? 18
+      : filterOption === "romance"
+      ? 10749
+      : filterOption === "thriller"
+      ? 53
+      : 12;
+
   let now_playing_url = `https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=${pageNumber}`;
   let search_query_url = `https://api.themoviedb.org/3/search/movie?query=${searchQuery}&include_adult=false&language=en-US&page=${pageNumber}`;
+  const filter_url = `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=original_title.asc&with_genres=${genre_id}`;
 
   const getMovies = async (api_url) => {
     const url = api_url;
@@ -36,7 +55,7 @@ function MovieList() {
       const response = await fetch(url, options);
       const data = await response.json();
 
-      // console.log(data.results);
+      console.log("data", data.results);
       const newMovies = data.results.map((movie) => ({
         movie: movie,
         movie_key: movie.id,
@@ -48,7 +67,7 @@ function MovieList() {
         year: parseInt(movie.release_date.substring(0, 4)),
         overview: movie.overview,
       }));
-
+      // console.log("newMovies", newMovies);
       return newMovies;
     } catch (err) {
       console.error("error:" + err);
@@ -57,6 +76,7 @@ function MovieList() {
   };
 
   useEffect(() => {
+    // console.log(genre_id);
     if (pageNumber !== INITIAL_PAGE_NUMBER) {
       (async () => {
         const newMovies = await getMovies(now_playing_url);
@@ -72,8 +92,8 @@ function MovieList() {
 
   const handleLoadMoreClick = async () => {
     setPageNumber((pageNumber) => pageNumber + 1);
-    const newMovies = await getMovies(now_playing_url);
-    setMovies((prevMovies) => [...prevMovies, ...newMovies]);
+    // const newMovies = await getMovies(now_playing_url);
+    // setMovies((prevMovies) => [...prevMovies, ...newMovies]);
   };
 
   const handleSearchChange = async (event) => {
@@ -150,6 +170,51 @@ function MovieList() {
     // console.log("after" + pageNumber);
   };
 
+  useEffect(() => {
+    if (filterOption !== "") {
+      const filterMovies = async () => {
+        console.log("xyz");
+        setMovies([]);
+        const newMovies = await getMovies(filter_url);
+        console.log("new filter movies", newMovies);
+        console.log(
+          "new movies tieles",
+          newMovies.map((item) => item.title)
+        );
+        newMovies.map((item) => {
+          setMovies((prev) => [
+            ...prev,
+            {
+              movie_key: item.movie_key,
+              movie_title: item.movie_title,
+              poster_url: item.poster_url,
+              backdrop_url: item.backdrop_url,
+              movie_rating: item.movie_rating,
+              overview: item.overview,
+              release_date: item.release_date,
+              release_year: item.release_year,
+            },
+          ]);
+        });
+        // };\
+        console.log("movies inside", movies);
+      };
+      filterMovies();
+    }
+  }, [filterOption]);
+  console.log("movies outside", movies);
+
+  console.log("getFilter", getMovies(filter_url));
+  console.log("filter option", filterOption);
+  const handleFilterChange = (event) => {
+    const filter_option = event.target.value;
+    setFilterOption(filter_option);
+    // if (sortOption === "movie-title-AZ" || sortOption === "movie-title-ZA") {
+    //   sortMovies(sortOption);
+    // }
+    // // console.log("after" + pageNumber);
+  };
+
   //change sort option t sort order for less confusion
   function handleOpenModal(movie) {
     setSelectedMovie(movie);
@@ -195,6 +260,21 @@ function MovieList() {
           </option>
           <option value="rating-AZ">Sort by rating (accending)</option>
           <option value="rating-ZA">Sort by rating (decending)</option>
+        </select>
+        <select
+          // value={sort_option}
+          name="filter-options"
+          id="filter-options"
+          onChange={handleFilterChange}
+        >
+          <option value="">Filter movies by genre</option>
+          <option value="action">Action</option>
+          <option value="adventure">Adventure</option>
+          <option value="comedy">Comedy</option>
+          <option value="documentary">Documentary</option>
+          <option value="drama">Drama</option>
+          <option value="romance">Romance</option>
+          <option value="thriller">Thriller</option>
         </select>
       </div>
       {movies.length === 0 ? (
